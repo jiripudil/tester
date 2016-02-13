@@ -37,7 +37,7 @@ class CliTester
 		Environment::$debugMode = (bool) $this->options['--debug'];
 		if (isset($this->options['--colors'])) {
 			Environment::$useColors = (bool) $this->options['--colors'];
-		} elseif (in_array($this->options['-o'], array('tap', 'junit'))) {
+		} elseif (in_array($this->options['-o'], array('tap', 'junit', 'teamcity'))) {
 			Environment::$useColors = FALSE;
 		}
 
@@ -97,21 +97,21 @@ Usage:
     tester.php [options] [<test file> | <directory>]...
 
 Options:
-    -p <path>                    Specify PHP interpreter to run (default: php-cgi).
-    -c <path>                    Look for php.ini file (or look in directory) <path>.
-    -l | --log <path>            Write log to file <path>.
-    -d <key=value>...            Define INI entry 'key' with value 'val'.
-    -s                           Show information about skipped tests.
-    --stop-on-fail               Stop execution upon the first failure.
-    -j <num>                     Run <num> jobs in parallel (default: 8).
-    -o <console|tap|junit|none>  Specify output format.
-    -w | --watch <path>          Watch directory.
-    -i | --info                  Show tests environment info and exit.
-    --setup <path>               Script for runner setup.
-    --colors [1|0]               Enable or disable colors.
-    --coverage <path>            Generate code coverage report to file.
-    --coverage-src <path>        Path to source code.
-    -h | --help                  This help.
+    -p <path>                             Specify PHP interpreter to run (default: php-cgi).
+    -c <path>                             Look for php.ini file (or look in directory) <path>.
+    -l | --log <path>                     Write log to file <path>.
+    -d <key=value>...                     Define INI entry 'key' with value 'val'.
+    -s                                    Show information about skipped tests.
+    --stop-on-fail                        Stop execution upon the first failure.
+    -j <num>                              Run <num> jobs in parallel (default: 8).
+    -o <console|tap|junit|teamcity|none>  Specify output format.
+    -w | --watch <path>                   Watch directory.
+    -i | --info                           Show tests environment info and exit.
+    --setup <path>                        Script for runner setup.
+    --colors [1|0]                        Enable or disable colors.
+    --coverage <path>                     Generate code coverage report to file.
+    --coverage-src <path>                 Path to source code.
+    -h | --help                           This help.
 
 XX
 		, array(
@@ -207,6 +207,9 @@ XX
 					break;
 				case 'junit':
 					$runner->outputHandlers[] = new Output\JUnitPrinter($runner);
+					break;
+				case 'teamcity':
+					$runner->outputHandlers[] = new Output\TeamCityPrinter($runner);
 					break;
 				default:
 					$runner->outputHandlers[] = new Output\ConsolePrinter($runner, $this->options['-s']);
