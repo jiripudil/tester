@@ -59,6 +59,9 @@ class Job
 	/** @var int */
 	private $exitCode = self::CODE_NONE;
 
+	/** @var float */
+	private $time;
+
 
 	/**
 	 * @param  string  test file name
@@ -79,6 +82,7 @@ class Job
 	 */
 	public function run($flags = NULL)
 	{
+		$this->time = microtime(TRUE);
 		putenv(Environment::RUNNER . '=1');
 		putenv(Environment::COLORS . '=' . (int) Environment::$useColors);
 		$this->proc = proc_open(
@@ -141,6 +145,7 @@ class Job
 		}
 		$code = proc_close($this->proc);
 		$this->exitCode = $code === self::CODE_NONE ? $status['exitcode'] : $code;
+		$this->time = microtime(TRUE) - $this->time;
 
 		if ($this->interpreter->isCgi() && count($tmp = explode("\r\n\r\n", $this->output, 2)) >= 2) {
 			list($headers, $this->output) = $tmp;
@@ -212,6 +217,16 @@ class Job
 	public function getHeaders()
 	{
 		return $this->headers;
+	}
+
+
+	/**
+	 * Returns how long the job run.
+	 * @return float
+	 */
+	public function getTime()
+	{
+		return $this->time;
 	}
 
 }

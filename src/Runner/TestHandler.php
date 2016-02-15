@@ -86,12 +86,12 @@ class TestHandler
 			}
 			foreach ((array) $annotations[$m[1]] as $arg) {
 				if ($res = $this->$method($job, $arg)) {
-					$this->runner->writeResult($testName, $res[0], $res[1]);
+					$this->runner->writeResult($testName, $res[0], $res[1], $job);
 					return;
 				}
 			}
 		}
-		$this->runner->writeResult($testName, Runner::PASSED);
+		$this->runner->writeResult($testName, Runner::PASSED, NULL, $job);
 	}
 
 

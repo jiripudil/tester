@@ -39,7 +39,7 @@ class TeamCityPrinter implements Tester\Runner\OutputHandler
 	}
 
 
-	public function result($testName, $result, $message)
+	public function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
 	{
 		if (!$this->started) {
 			$this->startSuite();
@@ -50,15 +50,15 @@ class TeamCityPrinter implements Tester\Runner\OutputHandler
 
 		fwrite($this->file, "##teamcity[testStarted name='$escapedName']\n\n");
 
-		if ($result === Runner::PASSED) {
-			fwrite($this->file, "##teamcity[testFinished name='$escapedName' duration='0']\n\n");
-
-		} elseif ($result === Runner::SKIPPED) {
+		if ($result === Runner::SKIPPED) {
 			fwrite($this->file, "##teamcity[testIgnored name='$escapedName' message='$escapedMessage']\n\n");
 
 		} elseif ($result === Runner::FAILED) {
 			fwrite($this->file, "##teamcity[testFailed name='$escapedName' message='$escapedMessage']\n\n");
 		}
+
+		$time = $job !== NULL ? (int) round($job->getTime() * 1000) : 0;
+		fwrite($this->file, "##teamcity[testFinished name='$escapedName' duration='$time']\n\n");
 	}
 
 

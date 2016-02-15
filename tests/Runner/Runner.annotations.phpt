@@ -17,7 +17,7 @@ class Logger implements Tester\Runner\OutputHandler
 {
 	public $results = [];
 
-	function result($testName, $result, $message)
+	function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
 	{
 		$this->results[] = [basename($testName), $result, $message];
 	}

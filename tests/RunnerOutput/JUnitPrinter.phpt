@@ -28,13 +28,13 @@ $expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
 	<testsuite errors="1" skipped="1" tests="3" time="%a%" timestamp="%a%">
-		<testcase classname="RunnerOutput%ds%cases%ds%fail.phptx" name="RunnerOutput%ds%cases%ds%fail.phptx">
+		<testcase classname="RunnerOutput%ds%cases%ds%fail.phptx" name="RunnerOutput%ds%cases%ds%fail.phptx" time="%a%">
 			<failure message="Failed: STOP
 
 in RunnerOutput%ds%cases%ds%fail.phptx(4) Tester\\Assert::fail('STOP');"/>
 		</testcase>
-		<testcase classname="RunnerOutput%ds%cases%ds%pass.phptx" name="RunnerOutput%ds%cases%ds%pass.phptx"/>
-		<testcase classname="RunnerOutput%ds%cases%ds%skip.phptx" name="RunnerOutput%ds%cases%ds%skip.phptx">
+		<testcase classname="RunnerOutput%ds%cases%ds%pass.phptx" name="RunnerOutput%ds%cases%ds%pass.phptx" time="%a%"/>
+		<testcase classname="RunnerOutput%ds%cases%ds%skip.phptx" name="RunnerOutput%ds%cases%ds%skip.phptx" time="%a%">
 			<skipped/>
 		</testcase>
 	</testsuite>

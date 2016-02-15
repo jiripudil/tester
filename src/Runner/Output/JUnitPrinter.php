@@ -42,9 +42,9 @@ class JUnitPrinter implements Tester\Runner\OutputHandler
 	}
 
 
-	public function result($testName, $result, $message)
+	public function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
 	{
-		$this->buffer .= "\t\t<testcase classname=\"" . htmlspecialchars($testName) . '" name="' . htmlspecialchars($testName) . '"';
+		$this->buffer .= "\t\t<testcase classname=\"" . htmlspecialchars($testName) . '" name="' . htmlspecialchars($testName) . '" time="' . $job->getTime() . '"';
 
 		switch ($result) {
 			case Runner::FAILED:

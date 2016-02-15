@@ -34,13 +34,17 @@ $expected = <<<TC
 
 ##teamcity[testFailed name='RunnerOutput%ds%cases%ds%fail.phptx' message='Failed: STOP|n|nin RunnerOutput%ds%cases%ds%fail.phptx(4) Tester\\Assert::fail(|'STOP|');']
 
+##teamcity[testFinished name='RunnerOutput%ds%cases%ds%fail.phptx' duration='%f%']
+
 ##teamcity[testStarted name='RunnerOutput%ds%cases%ds%pass.phptx']
 
-##teamcity[testFinished name='RunnerOutput%ds%cases%ds%pass.phptx' duration='0']
+##teamcity[testFinished name='RunnerOutput%ds%cases%ds%pass.phptx' duration='%f%']
 
 ##teamcity[testStarted name='RunnerOutput%ds%cases%ds%skip.phptx']
 
 ##teamcity[testIgnored name='RunnerOutput%ds%cases%ds%skip.phptx' message='']
+
+##teamcity[testFinished name='RunnerOutput%ds%cases%ds%skip.phptx' duration='%f%']
 
 ##teamcity[testSuiteFinished name='Tests']
 TC;

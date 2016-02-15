@@ -38,7 +38,7 @@ class Logger implements Tester\Runner\OutputHandler
 	}
 
 
-	public function result($testName, $result, $message)
+	public function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
 	{
 		$message = '   ' . str_replace("\n", "\n   ", Tester\Dumper::removeColors(trim($message)));
 		$outputs = array(

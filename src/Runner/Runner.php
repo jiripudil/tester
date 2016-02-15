@@ -158,11 +158,11 @@ class Runner
 	 * Writes to output handlers.
 	 * @return void
 	 */
-	public function writeResult($testName, $result, $message = NULL)
+	public function writeResult($testName, $result, $message = NULL, Job $job = NULL)
 	{
 		$this->results[$result]++;
 		foreach ($this->outputHandlers as $handler) {
-			$handler->result($testName, $result, $message);
+			$handler->result($testName, $result, $message, $job);
 		}
 
 		if ($this->stopOnFail && $result === self::FAILED) {
