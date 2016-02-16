@@ -18,7 +18,9 @@ interface OutputHandler
 
 	function begin();
 
-	function result($testName, $result, $message, Job $job = NULL);
+	function jobsProcessed($jobs, $jobCount);
+
+	function result($testName, $fileName, $result, $message, Job $job = NULL);
 
 	function end();
 

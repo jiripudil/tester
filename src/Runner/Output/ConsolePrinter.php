@@ -46,7 +46,12 @@ class ConsolePrinter implements Tester\Runner\OutputHandler
 	}
 
 
-	public function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
+	public function jobsProcessed($jobs, $jobCount)
+	{
+	}
+
+
+	public function result($testName, $fileName, $result, $message, Tester\Runner\Job $job = NULL)
 	{
 		$outputs = array(
 			Runner::PASSED => '.',

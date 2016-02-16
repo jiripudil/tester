@@ -45,7 +45,7 @@ class TestHandler
 			foreach ((array) $annotations[$m[1]] as $value) {
 				$res = $this->$method($value, $php, $file);
 				if ($res && is_int($res[0])) { // [Runner::*, message]
-					$this->runner->writeResult($testName, $res[0], $res[1]);
+					$this->runner->writeResult($testName, $file, $res[0], $res[1]);
 					return;
 				} elseif ($res && $res[1]) { // [param name, values]
 					$tmp = array();
@@ -86,12 +86,12 @@ class TestHandler
 			}
 			foreach ((array) $annotations[$m[1]] as $arg) {
 				if ($res = $this->$method($job, $arg)) {
-					$this->runner->writeResult($testName, $res[0], $res[1], $job);
+					$this->runner->writeResult($testName, $job->getFile(), $res[0], $res[1], $job);
 					return;
 				}
 			}
 		}
-		$this->runner->writeResult($testName, Runner::PASSED, NULL, $job);
+		$this->runner->writeResult($testName, $job->getFile(), Runner::PASSED, NULL, $job);
 	}
 
 

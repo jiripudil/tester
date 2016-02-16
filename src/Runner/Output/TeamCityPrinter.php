@@ -23,8 +23,8 @@ class TeamCityPrinter implements Tester\Runner\OutputHandler
 	/** @var resource */
 	private $file;
 
-	/** @var bool */
-	private $started = FALSE;
+	/** @var array */
+	private $suites = array();
 
 
 	public function __construct(Runner $runner, $file = 'php://output')
@@ -39,40 +39,83 @@ class TeamCityPrinter implements Tester\Runner\OutputHandler
 	}
 
 
-	public function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
+	public function jobsProcessed($jobs, $jobCount)
 	{
-		if (!$this->started) {
-			$this->startSuite();
+		foreach ($jobs as $job) {
+			if (!isset($this->suites[$job->getFile()])) {
+				$this->suites[$job->getFile()] = array(
+					'cases' => 0,
+					'started' => FALSE,
+				);
+			}
+
+			$this->suites[$job->getFile()]['cases']++;
 		}
 
-		$escapedName = $this->escape($testName);
+		fwrite($this->file, "##teamcity[testCount count='{$jobCount}']\n\n");
+	}
+
+
+	public function result($testName, $fileName, $result, $message, Tester\Runner\Job $job = NULL)
+	{
+		list($suiteName, $singleTestName) = $this->parseTestName($testName, $job);
+		$escapedSuiteName = $this->escape($suiteName);
+		$escapedName = $this->escape($singleTestName);
+		$escapedFileName = $this->escape($fileName);
+
+		if (!isset($this->suites[$fileName]) || !$this->suites[$fileName]['started']) {
+			fwrite($this->file, "##teamcity[testSuiteStarted name='$escapedSuiteName' locationHint='tester_file://$escapedFileName' flowId='$escapedFileName']\n\n");
+
+			if (isset($this->suites[$fileName])) {
+				$this->suites[$fileName]['started'] = TRUE;
+			}
+		}
+
 		$escapedMessage = $this->escape($message);
 
-		fwrite($this->file, "##teamcity[testStarted name='$escapedName']\n\n");
+		$locationHint = $suiteName === $singleTestName
+			? 'tester_file://' . $fileName
+			: 'tester_method://' . $fileName . '#' . $singleTestName;
+		fwrite($this->file, "##teamcity[testStarted name='$escapedName' locationHint='{$this->escape($locationHint)}' flowId='$escapedFileName']\n\n");
 
 		if ($result === Runner::SKIPPED) {
-			fwrite($this->file, "##teamcity[testIgnored name='$escapedName' message='$escapedMessage']\n\n");
+			fwrite($this->file, "##teamcity[testIgnored name='$escapedName' message='$escapedMessage' flowId='$escapedFileName']\n\n");
 
 		} elseif ($result === Runner::FAILED) {
-			fwrite($this->file, "##teamcity[testFailed name='$escapedName' message='$escapedMessage']\n\n");
+			fwrite($this->file, "##teamcity[testFailed name='$escapedName' message='$escapedMessage' flowId='$escapedFileName']\n\n");
 		}
 
 		$time = $job !== NULL ? (int) round($job->getTime() * 1000) : 0;
-		fwrite($this->file, "##teamcity[testFinished name='$escapedName' duration='$time']\n\n");
+		fwrite($this->file, "##teamcity[testFinished name='$escapedName' duration='$time' flowId='$escapedFileName']\n\n");
+
+		if (!isset($this->suites[$fileName]) || --$this->suites[$fileName]['cases'] < 1) {
+			fwrite($this->file, "##teamcity[testSuiteFinished name='$escapedSuiteName' flowId='$escapedFileName']\n\n");
+		}
 	}
 
 
 	public function end()
 	{
-		fwrite($this->file, "##teamcity[testSuiteFinished name='Tests']\n\n");
 	}
 
 
-	private function startSuite()
+	private function parseTestName($testName, Tester\Runner\Job $job = NULL)
 	{
-		fwrite($this->file, "##teamcity[testCount count='{$this->runner->getJobCount()}']\n\n");
-		fwrite($this->file, "##teamcity[testSuiteStarted name='Tests']\n\n");
-		$this->started = TRUE;
+		preg_match('~((.+)\s+\|\s+)?([^\[]+)(\[(.+)\])?~', $testName, $matches);
+		$testName = trim($matches[2]);
+		$fileName = trim($matches[3]);
+		$suiteName = !empty($testName) ? $testName : $fileName;
+
+		$singleTestName = $suiteName;
+		if ($job !== NULL) {
+			foreach ($job->getArguments() as $arg) {
+				if (preg_match('~--method=([a-zA-Z0-9_]+)~', $arg, $matches)) {
+					$singleTestName = $matches[1];
+				}
+			}
+		}
+
+		return array($suiteName, $singleTestName);
 	}
 
 

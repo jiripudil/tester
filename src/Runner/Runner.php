@@ -79,6 +79,10 @@ class Runner
 		}
 		$this->jobCount = count($this->jobs) + array_sum($this->results);
 
+		foreach ($this->outputHandlers as $handler) {
+			$handler->jobsProcessed($this->jobs, $this->jobCount);
+		}
+
 		$this->installInterruptHandler();
 		while (($this->jobs || $running) && !$this->isInterrupted()) {
 			for ($i = count($running); $this->jobs && $i < $this->threadCount; $i++) {
@@ -145,6 +149,16 @@ class Runner
 
 
 	/**
+	 * Get jobs queue.
+	 * @return Job[]
+	 */
+	public function getJobs()
+	{
+		return $this->jobs;
+	}
+
+
+	/**
 	 * Get count of jobs.
 	 * @return int
 	 */
@@ -158,11 +172,11 @@ class Runner
 	 * Writes to output handlers.
 	 * @return void
 	 */
-	public function writeResult($testName, $result, $message = NULL, Job $job = NULL)
+	public function writeResult($testName, $fileName, $result, $message = NULL, Job $job = NULL)
 	{
 		$this->results[$result]++;
 		foreach ($this->outputHandlers as $handler) {
-			$handler->result($testName, $result, $message, $job);
+			$handler->result($testName, $fileName, $result, $message, $job);
 		}
 
 		if ($this->stopOnFail && $result === self::FAILED) {

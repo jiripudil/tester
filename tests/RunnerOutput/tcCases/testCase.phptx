@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @testCase
+ */
+
+require __DIR__ . '/../../bootstrap.php';
+
+
+class UnnamedTestCase extends Tester\TestCase
+{
+
+	public function testPass()
+	{
+		Tester\Environment::$checkAssertions = FALSE;
+	}
+
+
+	public function testFail()
+	{
+		Tester\Assert::fail('STOP');
+	}
+
+
+	public function testSkip()
+	{
+		Tester\Environment::skip();
+	}
+
+}
+
+
+$testCase = new UnnamedTestCase();
+$testCase->run();

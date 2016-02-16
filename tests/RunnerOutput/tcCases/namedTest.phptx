@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * TEST: Named test
+ */
+
+require __DIR__ . '/../../bootstrap.php';
+Tester\Environment::$checkAssertions = FALSE;

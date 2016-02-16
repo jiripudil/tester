@@ -28,25 +28,33 @@ $output = ob_get_clean();
 $expected = <<<TC
 ##teamcity[testCount count='3']
 
-##teamcity[testSuiteStarted name='Tests']
+##teamcity[testSuiteStarted name='RunnerOutput%ds%cases%ds%fail.phptx' locationHint='tester_file://%a%RunnerOutput%ds%cases%ds%fail.phptx' flowId='%a%RunnerOutput%ds%cases%ds%fail.phptx']
 
-##teamcity[testStarted name='RunnerOutput%ds%cases%ds%fail.phptx']
+##teamcity[testStarted name='RunnerOutput%ds%cases%ds%fail.phptx' locationHint='tester_file://%a%RunnerOutput%ds%cases%ds%fail.phptx' flowId='%a%RunnerOutput%ds%cases%ds%fail.phptx']
 
-##teamcity[testFailed name='RunnerOutput%ds%cases%ds%fail.phptx' message='Failed: STOP|n|nin RunnerOutput%ds%cases%ds%fail.phptx(4) Tester\\Assert::fail(|'STOP|');']
+##teamcity[testFailed name='RunnerOutput%ds%cases%ds%fail.phptx' message='Failed: STOP|n|nin RunnerOutput%ds%cases%ds%fail.phptx(4) Tester\\Assert::fail(|'STOP|');' flowId='%a%RunnerOutput%ds%cases%ds%fail.phptx']
 
-##teamcity[testFinished name='RunnerOutput%ds%cases%ds%fail.phptx' duration='%f%']
+##teamcity[testFinished name='RunnerOutput%ds%cases%ds%fail.phptx' duration='%f%' flowId='%a%RunnerOutput%ds%cases%ds%fail.phptx']
 
-##teamcity[testStarted name='RunnerOutput%ds%cases%ds%pass.phptx']
+##teamcity[testSuiteFinished name='RunnerOutput%ds%cases%ds%fail.phptx' flowId='%a%RunnerOutput%ds%cases%ds%fail.phptx']
 
-##teamcity[testFinished name='RunnerOutput%ds%cases%ds%pass.phptx' duration='%f%']
+##teamcity[testSuiteStarted name='RunnerOutput%ds%cases%ds%pass.phptx' locationHint='tester_file://%a%RunnerOutput%ds%cases%ds%pass.phptx' flowId='%a%RunnerOutput%ds%cases%ds%pass.phptx']
 
-##teamcity[testStarted name='RunnerOutput%ds%cases%ds%skip.phptx']
+##teamcity[testStarted name='RunnerOutput%ds%cases%ds%pass.phptx' locationHint='tester_file://%a%RunnerOutput%ds%cases%ds%pass.phptx' flowId='%a%RunnerOutput%ds%cases%ds%pass.phptx']
 
-##teamcity[testIgnored name='RunnerOutput%ds%cases%ds%skip.phptx' message='']
+##teamcity[testFinished name='RunnerOutput%ds%cases%ds%pass.phptx' duration='%f%' flowId='%a%RunnerOutput%ds%cases%ds%pass.phptx']
 
-##teamcity[testFinished name='RunnerOutput%ds%cases%ds%skip.phptx' duration='%f%']
+##teamcity[testSuiteFinished name='RunnerOutput%ds%cases%ds%pass.phptx' flowId='%a%RunnerOutput%ds%cases%ds%pass.phptx']
 
-##teamcity[testSuiteFinished name='Tests']
+##teamcity[testSuiteStarted name='RunnerOutput%ds%cases%ds%skip.phptx' locationHint='tester_file://%a%RunnerOutput%ds%cases%ds%skip.phptx' flowId='%a%RunnerOutput%ds%cases%ds%skip.phptx']
+
+##teamcity[testStarted name='RunnerOutput%ds%cases%ds%skip.phptx' locationHint='tester_file://%a%RunnerOutput%ds%cases%ds%skip.phptx' flowId='%a%RunnerOutput%ds%cases%ds%skip.phptx']
+
+##teamcity[testIgnored name='RunnerOutput%ds%cases%ds%skip.phptx' message='' flowId='%a%RunnerOutput%ds%cases%ds%skip.phptx']
+
+##teamcity[testFinished name='RunnerOutput%ds%cases%ds%skip.phptx' duration='%f%' flowId='%a%RunnerOutput%ds%cases%ds%skip.phptx']
+
+##teamcity[testSuiteFinished name='RunnerOutput%ds%cases%ds%skip.phptx' flowId='%a%RunnerOutput%ds%cases%ds%skip.phptx']
 TC;
 
 Assert::match($expected, $output);

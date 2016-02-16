@@ -17,12 +17,13 @@ class Logger implements Tester\Runner\OutputHandler
 {
 	public $results = [];
 
-	function result($testName, $result, $message, Tester\Runner\Job $job = NULL)
+	function result($testName, $fileName, $result, $message, Tester\Runner\Job $job = NULL)
 	{
 		$this->results[] = [basename($testName), $result, $message];
 	}
 
 	function begin() {}
+	public function jobsProcessed($jobs, $jobCount) {}
 	function end() {}
 }
 

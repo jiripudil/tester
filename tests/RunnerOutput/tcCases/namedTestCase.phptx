@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * TEST: Named TestCase
+ * @testCase
+ */
+
+require __DIR__ . '/../../bootstrap.php';
+
+
+class NamedTestCase extends Tester\TestCase
+{
+
+	public function testNamedTest()
+	{
+		Tester\Environment::$checkAssertions = FALSE;
+	}
+
+}
+
+
+$testCase = new NamedTestCase();
+$testCase->run();
